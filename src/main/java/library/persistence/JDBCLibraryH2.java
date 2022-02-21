@@ -3,6 +3,8 @@ package library.persistence;
 
 import library.model.client.Client;
 import library.model.document.Book;
+import library.model.document.Cd;
+import library.model.document.Dvd;
 
 import java.sql.*;
 import java.util.Calendar;
@@ -195,6 +197,186 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                         rs.getString("editor"),
                         rs.getDate("publicationyear"),
                         rs.getInt("nbpages"),
+                        rs.getString("genre"),
+                        rs.getInt("shelfnumber"),
+                        rs.getBoolean("isoutofstock")
+                );
+            }
+
+        } catch (SQLException e) {
+            handleException(e);
+            return null;
+        }
+    }
+
+    @Override
+    public void createTableCd() {
+        try {
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            System.out.println("Creating table CD in given database...");
+            stmt = conn.createStatement();
+            String sql =  "CREATE TABLE CD " +
+                    "(id INTEGER not NULL, " +
+                    " title VARCHAR(255) NOT NULL, " +
+                    " author VARCHAR(255) NOT NULL, " +
+                    " editor VARCHAR(255) NOT NULL, " +
+                    " publicationYear Date NOT NULL, " +
+                    " nbscenes INTEGER NOT NULL, " +
+                    " genre VARCHAR(255) NOT NULL , " +
+                    " shelfnumber INTEGER NOT NULL , " +
+                    " isoutofstock BOOLEAN NOT NULL , " +
+                    " PRIMARY KEY ( id ))";
+            stmt.executeUpdate(sql);
+            System.out.println("Created table CD in given database...");
+        } catch(Exception e) {
+            handleException(e);
+        } finally {
+            try{
+                if(stmt!=null) stmt.close();
+            } catch(SQLException se2) {
+                handleException(se2);
+            }
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se){
+                handleException(se);
+            }
+        }
+    }
+
+    @Override
+    public void save(Cd cd) {
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement()
+        ) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(cd.getPublicationYear());
+            String year = Integer.toString(calendar.get(Calendar.YEAR)) ;
+
+            System.out.println("Inserting records into the table...");
+            String sql = "INSERT INTO CD VALUES ("+ cd.getId() +
+                    ",'"+ cd.getTitle()+"'" +
+                    ",'"+ cd.getAuthor()+"'" +
+                    ",'"+cd.getEditor()+"'" +
+                    ", parsedatetime("+ year +", 'yyyy')"+
+                    ",'"+ cd.getNbScenes()+"'"+
+                    ",'" + cd.getGenre() + "'" +
+                    "," + cd.getShelfNumber() +
+                    "," + cd.isOutOfStock() +
+                    ");";
+            stmt.executeUpdate(sql);
+            System.out.println("Inserted records into the table...");
+        } catch (SQLException e) {
+            handleException(e);
+        }
+
+    }
+
+    @Override
+    public Cd getCd(int cdId) {
+
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            PreparedStatement ps = conn.prepareStatement("SELECT id,title, author, editor, publicationyear, nbscenes, genre, shelfnumber, isoutofstock FROM CD WHERE id = "+ cdId);
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                return new Cd(rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getString("editor"),
+                        rs.getDate("publicationyear"),
+                        rs.getInt("nbscenes"),
+                        rs.getString("genre"),
+                        rs.getInt("shelfnumber"),
+                        rs.getBoolean("isoutofstock")
+                );
+            }
+
+        } catch (SQLException e) {
+            handleException(e);
+            return null;
+        }
+    }
+
+    @Override
+    public void createTableDvd() {
+        try {
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            System.out.println("Creating table DVD in given database...");
+            stmt = conn.createStatement();
+            String sql =  "CREATE TABLE DVD " +
+                    "(id INTEGER not NULL, " +
+                    " title VARCHAR(255) NOT NULL, " +
+                    " author VARCHAR(255) NOT NULL, " +
+                    " editor VARCHAR(255) NOT NULL, " +
+                    " publicationYear Date NOT NULL, " +
+                    " nbscenes INTEGER NOT NULL, " +
+                    " genre VARCHAR(255) NOT NULL , " +
+                    " shelfnumber INTEGER NOT NULL , " +
+                    " isoutofstock BOOLEAN NOT NULL , " +
+                    " PRIMARY KEY ( id ))";
+            stmt.executeUpdate(sql);
+            System.out.println("Created table DVD in given database...");
+        } catch(Exception e) {
+            handleException(e);
+        } finally {
+            try{
+                if(stmt!=null) stmt.close();
+            } catch(SQLException se2) {
+                handleException(se2);
+            }
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se){
+                handleException(se);
+            }
+        }
+    }
+
+    @Override
+    public void save(Dvd dvd) {
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement()
+        ) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dvd.getPublicationYear());
+            String year = Integer.toString(calendar.get(Calendar.YEAR)) ;
+
+            System.out.println("Inserting records into the table...");
+            String sql = "INSERT INTO DVD VALUES ("+ dvd.getId() +
+                    ",'"+ dvd.getTitle()+"'" +
+                    ",'"+ dvd.getAuthor()+"'" +
+                    ",'"+dvd.getEditor()+"'" +
+                    ", parsedatetime("+ year +", 'yyyy')"+
+                    ",'"+ dvd.getNbScenes()+"'"+
+                    ",'" + dvd.getGenre() + "'" +
+                    "," + dvd.getShelfNumber() +
+                    "," + dvd.isOutOfStock() +
+                    ");";
+            stmt.executeUpdate(sql);
+            System.out.println("Inserted records into the table...");
+        } catch (SQLException e) {
+            handleException(e);
+        }
+
+    }
+
+    @Override
+    public Dvd getDvd(int dvdId) {
+
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            PreparedStatement ps = conn.prepareStatement("SELECT id,title, author, editor, publicationyear, nbscenes, genre, shelfnumber, isoutofstock FROM DVD WHERE id = "+ dvdId);
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                return new Dvd(rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getString("editor"),
+                        rs.getDate("publicationyear"),
+                        rs.getInt("nbscenes"),
                         rs.getString("genre"),
                         rs.getInt("shelfnumber"),
                         rs.getBoolean("isoutofstock")

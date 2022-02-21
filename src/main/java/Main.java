@@ -31,7 +31,14 @@ public class Main {
         //s.createTableBook();
 
         //s.saveBook(book);
-        System.out.println(s.getBook(1));
+        //System.out.println(s.getBook(1));
+        //s.createTableCd();
+        //s.saveCd(cd);
+        //System.out.println(s.getCd(1));
+       // s.createTablDvd();
+       // s.saveDvd(dvd);
+       // System.out.println(s.getDvd(1));
+
 
 
     }
