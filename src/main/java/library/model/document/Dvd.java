@@ -87,7 +87,7 @@ public class Dvd implements Document{
     }
 
     @Override
-    public int geNbPages() {
+    public int getNbPages() {
         return 0;
     }
 

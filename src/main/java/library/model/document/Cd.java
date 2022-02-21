@@ -76,7 +76,7 @@ public class Cd implements Document{
     }
 
 
-    public int geNbPages() {
+    public int getNbPages() {
         return 0;
     }
 

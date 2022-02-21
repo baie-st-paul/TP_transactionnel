@@ -2,7 +2,7 @@ package library.model.document;
 
 import java.util.Date;
 
-public class Livre implements Document{
+public class Book implements Document{
 
     private final int id;
     private final String title;
@@ -14,7 +14,7 @@ public class Livre implements Document{
     private int shelfNumber;
     private boolean isOutOfStock;
 
-    public Livre(int id, String title, String author, String editor, Date publicationYear, int nbPages, String genre, int shelfNumber, boolean isOutOfStock) {
+    public Book(int id, String title, String author, String editor, Date publicationYear, int nbPages, String genre, int shelfNumber, boolean isOutOfStock) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -87,7 +87,7 @@ public class Livre implements Document{
     }
 
     @Override
-    public int geNbPages() {
+    public int getNbPages() {
         return nbPages;
     }
 

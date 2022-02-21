@@ -2,14 +2,15 @@ package library.persistence;
 
 
 import library.model.client.Client;
+import library.model.document.Book;
 
 import java.sql.*;
+import java.util.Calendar;
 
 public class JDBCLibraryH2 implements JDBCLibrary{
 
     private final String DB_URL = "jdbc:h2:~/library";
 
-    //  Database credentials
     private final String USER = "username";
     private final String PASS = "password";
 
@@ -23,6 +24,14 @@ public class JDBCLibraryH2 implements JDBCLibrary{
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private void handleException(Exception exception) {
+        if (exception instanceof SQLException sqlException) {
+            System.out.println("Error Code: " + sqlException.getErrorCode());
+            System.out.println("SQL State: " + sqlException.getSQLState());
+        }
+        System.out.println("SQLException message: " + exception.getMessage());
     }
 
     public void createTableClient() {
@@ -44,24 +53,23 @@ public class JDBCLibraryH2 implements JDBCLibrary{
             stmt.executeUpdate(sql);
             System.out.println("Created table Client in given database...");
 
-            // STEP 4: Clean-up environment
             stmt.close();
             conn.close();
         } catch(Exception e) {
             handleException(e);
         } finally {
-            //finally block used to close resources
+
             try{
                 if(stmt!=null) stmt.close();
             } catch(SQLException se2) {
                 handleException(se2);
-            } // nothing we can do
+            }
             try {
                 if(conn!=null) conn.close();
             } catch(SQLException se){
                 handleException(se);
-            } //end finally try
-        } //end try
+            }
+        }
 
     }
 
@@ -71,11 +79,11 @@ public class JDBCLibraryH2 implements JDBCLibrary{
         ) {
             System.out.println("Inserting records into the table...");
             String sql = "INSERT INTO CLIENT VALUES ("+ client.getId() +
-                    ",\'"+ client.getFirstName()+"\'" +
-                    ",\'"+ client.getLastName()+"\'" +
-                    ",\'"+ client.getAddress()+"\'" +
-                    ",\'"+ client.getEMail()+"\'"+
-                    ",\'"+ client.getPostalCode()+"\'"+
+                    ",'"+ client.getFirstName()+"'" +
+                    ",'"+ client.getLastName()+"'" +
+                    ",'"+ client.getAddress()+"'" +
+                    ",'"+ client.getEMail()+"'"+
+                    ",'"+ client.getPostalCode()+"'"+
                     "," + client.getTotalFees() +
                     ");";
             stmt.executeUpdate(sql);
@@ -85,15 +93,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
         }
     }
 
-    private void handleException(Exception exception) {
-        if (exception instanceof SQLException sqlException) {
-            System.out.println("Error Code: " + sqlException.getErrorCode());
-            System.out.println("SQL State: " + sqlException.getSQLState());
-        }
-        System.out.println("SQLException message: " + exception.getMessage());
-        System.out.println("Stacktrace: ");
-        exception.printStackTrace();
-    }
+
 
     public Client getClient(int clientId){
         try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
@@ -107,7 +107,98 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                         rs.getString("email"),
                         rs.getString("postalcode"),
                         rs.getDouble("totalfees")
+
                         );
+            }
+
+        } catch (SQLException e) {
+            handleException(e);
+            return null;
+        }
+    }
+
+
+    public void createTableBook() {
+        try {
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            System.out.println("Creating table Book in given database...");
+            stmt = conn.createStatement();
+            String sql =  "CREATE TABLE BOOK " +
+                    "(id INTEGER not NULL, " +
+                    " title VARCHAR(255) NOT NULL, " +
+                    " author VARCHAR(255) NOT NULL, " +
+                    " editor VARCHAR(255) NOT NULL, " +
+                    " publicationYear Date NOT NULL, " +
+                    " nbpages INTEGER NOT NULL, " +
+                    " genre VARCHAR(255) NOT NULL , " +
+                    " shelfnumber INTEGER NOT NULL , " +
+                    " isoutofstock BOOLEAN NOT NULL , " +
+                    " PRIMARY KEY ( id ))";
+            stmt.executeUpdate(sql);
+            System.out.println("Created table Book in given database...");
+        } catch(Exception e) {
+            handleException(e);
+        } finally {
+            try{
+                if(stmt!=null) stmt.close();
+            } catch(SQLException se2) {
+                handleException(se2);
+            }
+            try {
+                if(conn!=null) conn.close();
+            } catch(SQLException se){
+                handleException(se);
+            }
+        }
+
+    }
+
+
+    public void save(Book book) {
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement()
+        ) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(book.getPublicationYear());
+            String year = Integer.toString(calendar.get(Calendar.YEAR)) ;
+
+            System.out.println("Inserting records into the table...");
+            String sql = "INSERT INTO BOOK VALUES ("+ book.getId() +
+                    ",'"+ book.getTitle()+"'" +
+                    ",'"+ book.getAuthor()+"'" +
+                    ",'"+book.getEditor()+"'" +
+                    ", parsedatetime("+ year +", 'yyyy')"+
+                    ",'"+ book.getNbPages()+"'"+
+                    ",'" + book.getGenre() + "'" +
+                    "," + book.getShelfNumber() +
+                    "," + book.isOutOfStock() +
+                    ");";
+            stmt.executeUpdate(sql);
+            System.out.println("Inserted records into the table...");
+        } catch (SQLException e) {
+            handleException(e);
+        }
+
+    }
+
+
+    public Book getBook(int bookId) {
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            PreparedStatement ps = conn.prepareStatement("SELECT id,title, author, editor, publicationyear, nbpages, genre, shelfnumber, isoutofstock FROM book WHERE id = "+ bookId);
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                return new Book(rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getString("editor"),
+                        rs.getDate("publicationyear"),
+                        rs.getInt("nbpages"),
+                        rs.getString("genre"),
+                        rs.getInt("shelfnumber"),
+                        rs.getBoolean("isoutofstock")
+                );
             }
 
         } catch (SQLException e) {
