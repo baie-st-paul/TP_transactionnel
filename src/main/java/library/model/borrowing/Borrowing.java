@@ -14,6 +14,10 @@ public class Borrowing {
     private final Date loanDate;
     private final Date returnDate;
 
+    public Document getDocument() {
+        return document;
+    }
+
     private final Document document;
 
     public Borrowing(int id, Document document) {

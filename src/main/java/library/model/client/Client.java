@@ -18,6 +18,14 @@ public class Client {
     private double totalFees;
     private final List<Borrowing> borrowingList = new ArrayList<>();
 
+    public String geteMail() {
+        return eMail;
+    }
+
+    public List<Borrowing> getBorrowingList() {
+        return borrowingList;
+    }
+
     @Override
     public String toString() {
         return "Client{" +

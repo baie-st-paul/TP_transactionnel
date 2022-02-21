@@ -1,5 +1,6 @@
 package library.service;
 
+import library.model.borrowing.Borrowing;
 import library.model.client.Client;
 import library.model.document.Book;
 import library.model.document.Cd;
@@ -8,6 +9,9 @@ import library.persistence.JDBCLibrary;
 
 
 public class ServiceLibrary {
+
+
+
     private final JDBCLibrary jdbcLibrary;
 
     public ServiceLibrary(JDBCLibrary jdbcLibrary) {
@@ -20,6 +24,11 @@ public class ServiceLibrary {
 
     public void saveClient(Client client){
         jdbcLibrary.save(client);
+
+        for(Borrowing borrowing : client.getBorrowingList()){
+            jdbcLibrary.save(borrowing, client.getId());
+        }
+
     }
 
     public Client getClient(int clientId){
@@ -48,7 +57,7 @@ public class ServiceLibrary {
        return jdbcLibrary.getCd(cdId);
     }
 
-    public void createTablDvd(){
+    public void createTableDvd(){
         jdbcLibrary.createTableDvd();
     }
     public void saveDvd(Dvd dvd){
@@ -57,4 +66,18 @@ public class ServiceLibrary {
     public Dvd getDvd(int dvdId){
         return jdbcLibrary.getDvd(dvdId);
     }
+
+    public void createTableDocument(){
+        jdbcLibrary.createTableDocument();
+    }
+
+    public void createTableBorrowing(){
+        jdbcLibrary.createTableBorrowing();
+    }
+
+    public void dropAll(){
+        jdbcLibrary.dropAll();
+    }
+
+
 }

@@ -4,6 +4,8 @@ import java.util.Date;
 
 public interface Document {
 
+
+
     void setShelfNumber(int shelfNumber);
 
     void setOutOfStock(boolean outOfStock);

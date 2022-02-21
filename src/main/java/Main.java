@@ -22,21 +22,27 @@ public class Main {
 
         ServiceLibrary s = new ServiceLibrary(new JDBCLibraryH2());
 
-        //s.createTableClient();
-        //
-        //s.saveClient(client2);
+        s.dropAll();
+
+        s.createTableClient();
+        s.createTableDocument();
+        s.createTableBorrowing();
+
+
+
+
+
+          s.createTableBook();
+        s.saveBook(book);
+        //System.out.println(s.getBook(1));
+        s.createTableCd();
+        s.saveCd(cd);
+        //System.out.println(s.getCd(1));
+        s.createTableDvd();
+        s.saveDvd(dvd);
+        s.saveClient(client);
 
         // System.out.println(s.getClient(2));
-
-        //s.createTableBook();
-
-        //s.saveBook(book);
-        //System.out.println(s.getBook(1));
-        //s.createTableCd();
-        //s.saveCd(cd);
-        //System.out.println(s.getCd(1));
-       // s.createTablDvd();
-       // s.saveDvd(dvd);
        // System.out.println(s.getDvd(1));
 
 
