@@ -90,4 +90,19 @@ public class Dvd implements Document{
     public int geNbPages() {
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "Dvd{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", editor='" + editor + '\'' +
+                ", publicationYear=" + publicationYear +
+                ", nbScenes=" + nbScenes +
+                ", genre='" + genre + '\'' +
+                ", shelfNumber=" + shelfNumber +
+                ", isOutOfStock=" + isOutOfStock +
+                '}';
+    }
 }

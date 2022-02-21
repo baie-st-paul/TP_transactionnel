@@ -43,7 +43,19 @@ public class Borrowing {
         return loanDate;
     }
 
+
+
     public Date getReturnDate() {
         return returnDate;
     }
+    @Override
+    public String toString() {
+        return "Borrowing{" +
+                "id=" + id +
+                ", loanDate=" + loanDate +
+                ", returnDate=" + returnDate +
+                ", document=" + document +
+                '}';
+    }
+
 }

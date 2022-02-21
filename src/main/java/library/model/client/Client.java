@@ -4,6 +4,7 @@ import library.model.borrowing.Borrowing;
 import library.model.document.Document;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +16,21 @@ public class Client {
     private String eMail;
     private String postalCode;
     private double totalFees;
-    private List<Borrowing> borrowingList;
+    private final List<Borrowing> borrowingList = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address='" + address + '\'' +
+                ", eMail='" + eMail + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", totalFees=" + totalFees +
+                ", borrowingList=" + borrowingList +
+                '}';
+    }
 
     public Client(int id, String firstName, String lastName, String address, String eMail, String postalCode, double totalFees) {
         this.id = id;
@@ -25,10 +40,12 @@ public class Client {
         this.eMail = eMail;
         this.postalCode = postalCode;
         this.totalFees = totalFees;
+
     }
 
     public void addBorrowing(Borrowing borrowing){
         borrowingList.add(borrowing);
+
     }
     public void removeBorrowing(int borrowingId){
         for(int i = 0 ; i < borrowingList.size(); i++){

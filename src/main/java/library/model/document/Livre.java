@@ -90,4 +90,19 @@ public class Livre implements Document{
     public int geNbPages() {
         return nbPages;
     }
+
+    @Override
+    public String toString() {
+        return "Livre{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", editor='" + editor + '\'' +
+                ", publicationYear=" + publicationYear +
+                ", nbPages=" + nbPages +
+                ", genre='" + genre + '\'' +
+                ", shelfNumber=" + shelfNumber +
+                ", isOutOfStock=" + isOutOfStock +
+                '}';
+    }
 }

@@ -29,4 +29,6 @@ public interface Document {
     boolean isOutOfStock() ;
 
     int geNbPages();
+
+
 }
