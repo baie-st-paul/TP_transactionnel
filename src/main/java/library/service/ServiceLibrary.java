@@ -79,5 +79,7 @@ public class ServiceLibrary {
         jdbcLibrary.dropAll();
     }
 
-
+    public Borrowing getBorrowing(int borrowingId){
+       return jdbcLibrary.getBorrowing(borrowingId);
+    }
 }

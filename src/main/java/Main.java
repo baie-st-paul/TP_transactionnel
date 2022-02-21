@@ -44,7 +44,7 @@ public class Main {
 
         // System.out.println(s.getClient(2));
        // System.out.println(s.getDvd(1));
-
+        System.out.println(s.getBorrowing(1));
 
 
     }

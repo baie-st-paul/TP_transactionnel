@@ -25,8 +25,7 @@ public interface JDBCLibrary {
 
      void createTableBorrowing();
      void save(Borrowing borrowing, int clientId);
-     Dvd getBorrowing(int borrowingId);
-
+     Borrowing getBorrowing(int borrowingId);
      void dropAll();
 
 }

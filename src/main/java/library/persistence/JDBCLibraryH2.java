@@ -182,7 +182,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                     " bk_genre VARCHAR(255) NOT NULL , " +
                     " bk_shelfnumber INTEGER NOT NULL , " +
                     " bk_isoutofstock BOOLEAN NOT NULL , " +
-                    " doc_id INTEGER NOT NULL , " +
+                    " doc_id INTEGER UNIQUE NOT NULL , " +
                     " PRIMARY KEY ( id ),"+
                     " FOREIGN KEY ( doc_id ) REFERENCES document(doc_id))";
             stmt.executeUpdate(sql);
@@ -273,7 +273,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                     " cd_genre VARCHAR(255) NOT NULL , " +
                     " cd_shelfnumber INTEGER NOT NULL , " +
                     " cd_isoutofstock BOOLEAN NOT NULL , " +
-                    " doc_id INTEGER NOT NULL , " +
+                    " doc_id INTEGER UNIQUE NOT NULL , " +
                     " PRIMARY KEY ( id ), "+
                     " FOREIGN KEY ( doc_id ) REFERENCES document(doc_id))";
             stmt.executeUpdate(sql);
@@ -364,7 +364,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                     " dvd_genre VARCHAR(255) NOT NULL , " +
                     " dvd_shelfnumber INTEGER NOT NULL , " +
                     " dvd_isoutofstock BOOLEAN NOT NULL , " +
-                    " doc_id INTEGER NOT NULL , " +
+                    " doc_id INTEGER UNIQUE NOT NULL , " +
                     " PRIMARY KEY ( id ),"+
                     " FOREIGN KEY ( doc_id ) REFERENCES document(doc_id))";
             stmt.executeUpdate(sql);
@@ -558,9 +558,45 @@ public class JDBCLibraryH2 implements JDBCLibrary{
         }
     }
 
+
+
     @Override
-    public Dvd getBorrowing(int borrowingId) {
+    public Borrowing getBorrowing(int borrowingId) {
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+
+
+            PreparedStatement ps = conn.prepareStatement("SELECT bo_id,doc_id FROM BORROWING WHERE bo_id = "+ borrowingId);
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+
+                PreparedStatement ps2 = conn.prepareStatement("SELECT doc_type FROM document WHERE doc_id=" + rs.getInt("doc_id"));
+
+                ResultSet rs2 = ps2.executeQuery();
+
+                rs2.next();
+                System.out.println(rs.getInt("doc_id"));
+                PreparedStatement ps3 = conn.prepareStatement("SELECT id FROM "+ rs2.getString("doc_type")+" WHERE doc_id="+ rs.getInt("doc_id") );
+                ResultSet rs3 = ps3.executeQuery();
+
+
+
+                switch (rs2.getString("doc_type")) {
+                    case "book":
+                        return new Borrowing(rs.getInt("bo_id"),getBook(rs3.getInt("id")));
+                    case "cd":
+                        return new Borrowing(rs.getInt("bo_id"),getCd(rs3.getInt("id")));
+                    case "dvd":
+                        return new Borrowing(rs.getInt("bo_id"),getDvd(rs3.getInt("id")));
+                }
+
+            }
+
+        } catch (SQLException e) {
+            handleException(e);
+            return null;
+        }
         return null;
     }
+
 
 }
