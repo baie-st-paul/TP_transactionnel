@@ -574,7 +574,6 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                 ResultSet rs2 = ps2.executeQuery();
 
                 rs2.next();
-                System.out.println(rs.getInt("doc_id"));
                 PreparedStatement ps3 = conn.prepareStatement("SELECT id FROM "+ rs2.getString("doc_type")+" WHERE doc_id="+ rs.getInt("doc_id") );
                 ResultSet rs3 = ps3.executeQuery();
 
