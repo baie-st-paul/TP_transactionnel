@@ -1,7 +1,7 @@
 package library.persistence;
 
 
-import library.model.borrowing.Borrowing;
+import library.model.loan.Loan;
 import library.model.client.Client;
 import library.model.document.Book;
 import library.model.document.Cd;
@@ -23,7 +23,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
 
     private int documentId = 0;
 
-    {
+    static {
         try {
             String JDBC_DRIVER = "org.h2.Driver";
             Class.forName(JDBC_DRIVER);
@@ -98,7 +98,6 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                     " clt_address VARCHAR(255), " +
                     " clt_email VARCHAR(255), " +
                     " clt_postalcode VARCHAR(255), " +
-                    " clt_totalFees NUMBER, " +
                     " PRIMARY KEY ( clt_id ))";
             stmt.executeUpdate(sql);
             System.out.println("Created table Client in given database...");
@@ -132,9 +131,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                     ",'"+ client.getLastName()+"'" +
                     ",'"+ client.getAddress()+"'" +
                     ",'"+ client.getEMail()+"'"+
-                    ",'"+ client.getPostalCode()+"'"+
-                    "," + client.getTotalFees() +
-                    ");";
+                    ",'"+ client.getPostalCode()+"');";
             stmt.executeUpdate(sql);
             System.out.println("Inserted records into the table...");
         } catch (SQLException e) {
@@ -146,7 +143,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
 
     public Client getClient(int clientId){
         try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            PreparedStatement ps = conn.prepareStatement("SELECT clt_id,clt_firstname, clt_lastname, clt_address, clt_email, clt_postalcode, clt_totalfees FROM client WHERE id = "+ clientId);
+            PreparedStatement ps = conn.prepareStatement("SELECT clt_id,clt_firstname, clt_lastname, clt_address, clt_email, clt_postalcode FROM client WHERE id = "+ clientId);
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();
                 return new Client(rs.getInt("clt_id"),
@@ -154,8 +151,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                         rs.getString("clt_lastname"),
                         rs.getString("clt_address"),
                         rs.getString("clt_email"),
-                        rs.getString("clt_postalcode"),
-                        rs.getDouble("clt_totalfees")
+                        rs.getString("clt_postalcode")
 
                         );
             }
@@ -180,7 +176,6 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                     " bk_publicationYear Date NOT NULL, " +
                     " bk_nbpages INTEGER NOT NULL, " +
                     " bk_genre VARCHAR(255) NOT NULL , " +
-                    " bk_shelfnumber INTEGER NOT NULL , " +
                     " bk_isoutofstock BOOLEAN NOT NULL , " +
                     " doc_id INTEGER UNIQUE NOT NULL , " +
                     " PRIMARY KEY ( id ),"+
@@ -221,8 +216,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                     ", parsedatetime("+ year +", 'yyyy')"+
                     ",'"+ book.getNbPages()+"'"+
                     ",'" + book.getGenre() + "'" +
-                    "," + book.getShelfNumber() +
-                    "," + book.isOutOfStock() +
+                    "," + book.isLoaned() +
                     "," + this.documentId +
                     ");";
             stmt.executeUpdate(sql);
@@ -236,7 +230,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
 
     public Book getBook(int bookId) {
         try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            PreparedStatement ps = conn.prepareStatement("SELECT id,bk_title, bk_author, bk_editor, bk_publicationyear, bk_nbpages, bk_genre, bk_shelfnumber, bk_isoutofstock FROM book WHERE id = "+ bookId);
+            PreparedStatement ps = conn.prepareStatement("SELECT id,bk_title, bk_author, bk_editor, bk_publicationyear, bk_nbpages, bk_genre, bk_isoutofstock FROM book WHERE id = "+ bookId);
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();
                 return new Book(rs.getInt("bk_id"),
@@ -245,9 +239,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                         rs.getString("bk_editor"),
                         rs.getDate("bk_publicationyear"),
                         rs.getInt("bk_nbpages"),
-                        rs.getString("bk_genre"),
-                        rs.getInt("bk_shelfnumber"),
-                        rs.getBoolean("bk_isoutofstock")
+                        rs.getString("bk_genre")
                 );
             }
 
@@ -271,7 +263,6 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                     " cd_publicationYear Date NOT NULL, " +
                     " cd_nbscenes INTEGER NOT NULL, " +
                     " cd_genre VARCHAR(255) NOT NULL , " +
-                    " cd_shelfnumber INTEGER NOT NULL , " +
                     " cd_isoutofstock BOOLEAN NOT NULL , " +
                     " doc_id INTEGER UNIQUE NOT NULL , " +
                     " PRIMARY KEY ( id ), "+
@@ -311,8 +302,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                     ", parsedatetime("+ year +", 'yyyy')"+
                     ",'"+ cd.getNbScenes()+"'"+
                     ",'" + cd.getGenre() + "'" +
-                    "," + cd.getShelfNumber() +
-                    "," + cd.isOutOfStock() +
+                    "," + cd.isLoaned() +
                     "," + this.documentId +
                     ");";
             stmt.executeUpdate(sql);
@@ -327,7 +317,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
     public Cd getCd(int cdId) {
 
         try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            PreparedStatement ps = conn.prepareStatement("SELECT id,cd_title, cd_author, cd_editor, cd_publicationyear, cd_nbscenes, cd_genre, cd_shelfnumber, cd_isoutofstock FROM CD WHERE id = "+ cdId);
+            PreparedStatement ps = conn.prepareStatement("SELECT id,cd_title, cd_author, cd_editor, cd_publicationyear, cd_nbscenes, cd_genre, cd_isoutofstock FROM CD WHERE id = "+ cdId);
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();
                 return new Cd(rs.getInt("id"),
@@ -336,9 +326,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                         rs.getString("cd_editor"),
                         rs.getDate("cd_publicationyear"),
                         rs.getInt("cd_nbscenes"),
-                        rs.getString("cd_genre"),
-                        rs.getInt("cd_shelfnumber"),
-                        rs.getBoolean("cd_isoutofstock")
+                        rs.getString("cd_genre")
                 );
             }
 
@@ -362,7 +350,6 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                     " dvd_publicationYear Date NOT NULL, " +
                     " dvd_nbscenes INTEGER NOT NULL, " +
                     " dvd_genre VARCHAR(255) NOT NULL , " +
-                    " dvd_shelfnumber INTEGER NOT NULL , " +
                     " dvd_isoutofstock BOOLEAN NOT NULL , " +
                     " doc_id INTEGER UNIQUE NOT NULL , " +
                     " PRIMARY KEY ( id ),"+
@@ -402,8 +389,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                     ", parsedatetime("+ year +", 'yyyy')"+
                     ",'"+ dvd.getNbScenes()+"'"+
                     ",'" + dvd.getGenre() + "'" +
-                    "," + dvd.getShelfNumber() +
-                    "," + dvd.isOutOfStock() +
+                    "," + dvd.isLoaned() +
                     "," + this.documentId +
                     ");";
             stmt.executeUpdate(sql);
@@ -418,7 +404,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
     public Dvd getDvd(int dvdId) {
 
         try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            PreparedStatement ps = conn.prepareStatement("SELECT id,dvd_title, dvd_author, dvd_editor, dvd_publicationyear, dvd_nbscenes, dvd_genre, dvd_shelfnumber, dvd_isoutofstock FROM DVD WHERE id = "+ dvdId);
+            PreparedStatement ps = conn.prepareStatement("SELECT id,dvd_title, dvd_author, dvd_editor, dvd_publicationyear, dvd_nbscenes, dvd_genre, dvd_isoutofstock FROM DVD WHERE id = "+ dvdId);
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();
                 return new Dvd(rs.getInt("id"),
@@ -427,9 +413,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
                         rs.getString("dvd_editor"),
                         rs.getDate("dvd_publicationyear"),
                         rs.getInt("dvd_nbscenes"),
-                        rs.getString("dvd_genre"),
-                        rs.getInt("dvd_shelfnumber"),
-                        rs.getBoolean("dvd_isoutofstock")
+                        rs.getString("dvd_genre")
                 );
             }
 
@@ -518,20 +502,20 @@ public class JDBCLibraryH2 implements JDBCLibrary{
     }
 
     @Override
-    public void save(Borrowing borrowing, int clientId) {
+    public void save(Loan loan, int clientId) {
         try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             Statement stmt = conn.createStatement()
         ) {
             incrementDocumentId();
             Calendar loanDate = Calendar.getInstance();
-            loanDate.setTime(borrowing.getLoanDate());
+            loanDate.setTime(loan.getLoanDate());
             Calendar returnDate = Calendar.getInstance();
-            returnDate.setTime(borrowing.getReturnDate());
+            returnDate.setTime(loan.getReturnDate());
             String sql = "INSERT INTO BORROWING VALUES ("+
-                    ""+ borrowing.getId()+"" +
+                    ""+ loan.getId()+"" +
                     ", parsedatetime('"+ loanDate.get(Calendar.YEAR) +"-"+String.format("%02d",loanDate.get(Calendar.MONTH)) +"-"+String.format("%02d",loanDate.get(Calendar.DAY_OF_MONTH)) +"' ,'yyyy-mm-dd') " +
                     ", parsedatetime('"+ returnDate.get(Calendar.YEAR) +"-"+ String.format("%02d",returnDate.get(Calendar.MONTH))+"-"+ String.format("%02d",loanDate.get(Calendar.DAY_OF_MONTH))+" ','yyyy-mm-dd') " +
-                    ","+ getDocumentId(borrowing.getDocument())+"" +
+                    ","+ getDocumentId(loan.getDocument())+"" +
                     ","+clientId+"" +
                     ");";
             stmt.executeUpdate(sql);
@@ -561,7 +545,7 @@ public class JDBCLibraryH2 implements JDBCLibrary{
 
 
     @Override
-    public Borrowing getBorrowing(int borrowingId) {
+    public Loan getBorrowing(int borrowingId) {
         try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
 
 
@@ -581,11 +565,11 @@ public class JDBCLibraryH2 implements JDBCLibrary{
 
                 switch (rs2.getString("doc_type")) {
                     case "book":
-                        return new Borrowing(rs.getInt("bo_id"),getBook(rs3.getInt("id")));
+                        return new Loan(rs.getInt("bo_id"),getBook(rs3.getInt("id")));
                     case "cd":
-                        return new Borrowing(rs.getInt("bo_id"),getCd(rs3.getInt("id")));
+                        return new Loan(rs.getInt("bo_id"),getCd(rs3.getInt("id")));
                     case "dvd":
-                        return new Borrowing(rs.getInt("bo_id"),getDvd(rs3.getInt("id")));
+                        return new Loan(rs.getInt("bo_id"),getDvd(rs3.getInt("id")));
                 }
 
             }

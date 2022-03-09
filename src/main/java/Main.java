@@ -1,4 +1,4 @@
-import library.model.borrowing.Borrowing;
+import library.model.loan.Loan;
 import library.model.client.Client;
 import library.model.document.Cd;
 import library.model.document.Dvd;
@@ -10,16 +10,18 @@ import java.util.Date;
 
 public class Main {
     public static void main(String[] args) {
-        Book book = new Book(1,"titre", "auth", "ed", new Date(), 2, "manuel scolaire", 1, false);
-        Cd cd = new Cd(1,"titre", "auth", "ed", new Date(), 2, "manuel scolaire", 1, false);
-        Dvd dvd = new Dvd(1,"titre", "auth", "ed", new Date(), 2, "manuel scolaire", 1, false);
+        Book book = new Book(1,"titre", "auth", "ed", new Date(), 2, "genre" );
+        Cd cd = new Cd(1,"titre", "auth", "ed", new Date(), 2, "manuel scolaire");
+        Dvd dvd = new Dvd(1,"titre", "auth", "ed", new Date(), 2, "manuel scolaire");
 
-        Borrowing borrowing = new Borrowing(1, book);
+        Loan loan = new Loan(1, book);
 
-        Client client = new Client(1, "phil", "val", "add", "s", "123", 0);
-        Client client2 = new Client(2, "phil2", "val", "add", "s", "123", 0.25);
-        client.addBorrowing(borrowing);
+        Client client = new Client(1, "phil", "val", "add", "s", "123");
+        Client client2 = new Client(2, "phil2", "val", "add", "s", "123");
+        client.addLoan(loan);
 
+
+/*
         ServiceLibrary s = new ServiceLibrary(new JDBCLibraryH2());
 
         s.dropAll();
@@ -32,7 +34,7 @@ public class Main {
 
 
 
-          s.createTableBook();
+        s.createTableBook();
         s.saveBook(book);
         //System.out.println(s.getBook(1));
         s.createTableCd();
@@ -45,7 +47,7 @@ public class Main {
         // System.out.println(s.getClient(2));
        // System.out.println(s.getDvd(1));
         System.out.println(s.getBorrowing(1));
-
+*/
 
     }
 

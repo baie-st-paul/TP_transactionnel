@@ -1,6 +1,6 @@
 package library.service;
 
-import library.model.borrowing.Borrowing;
+import library.model.loan.Loan;
 import library.model.client.Client;
 import library.model.document.Book;
 import library.model.document.Cd;
@@ -25,8 +25,8 @@ public class ServiceLibrary {
     public void saveClient(Client client){
         jdbcLibrary.save(client);
 
-        for(Borrowing borrowing : client.getBorrowingList()){
-            jdbcLibrary.save(borrowing, client.getId());
+        for(Loan loan : client.getLoanList()){
+            jdbcLibrary.save(loan, client.getId());
         }
 
     }
@@ -79,7 +79,7 @@ public class ServiceLibrary {
         jdbcLibrary.dropAll();
     }
 
-    public Borrowing getBorrowing(int borrowingId){
+    public Loan getBorrowing(int borrowingId){
        return jdbcLibrary.getBorrowing(borrowingId);
     }
 }

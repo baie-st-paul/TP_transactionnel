@@ -1,4 +1,4 @@
-package library.model.borrowing;
+package library.model.loan;
 
 
 import library.model.document.Document;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Borrowing {
+public class Loan {
 
     private final int id;
     private final Date loanDate;
@@ -20,7 +20,7 @@ public class Borrowing {
 
     private final Document document;
 
-    public Borrowing(int id, Document document) {
+    public Loan(int id, Document document) {
         this.id = id;
         this.document = document;
         this.loanDate = java.sql.Timestamp.valueOf(LocalDateTime.now()) ;

@@ -1,10 +1,9 @@
 package library.persistence;
 
-import library.model.borrowing.Borrowing;
+import library.model.loan.Loan;
 import library.model.client.Client;
 import library.model.document.Book;
 import library.model.document.Cd;
-import library.model.document.Document;
 import library.model.document.Dvd;
 
 public interface JDBCLibrary {
@@ -24,8 +23,8 @@ public interface JDBCLibrary {
 
 
      void createTableBorrowing();
-     void save(Borrowing borrowing, int clientId);
-     Borrowing getBorrowing(int borrowingId);
+     void save(Loan loan, int clientId);
+     Loan getBorrowing(int borrowingId);
      void dropAll();
 
 }

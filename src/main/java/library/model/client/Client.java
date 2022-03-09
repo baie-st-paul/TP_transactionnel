@@ -1,29 +1,27 @@
 package library.model.client;
 
-import library.model.borrowing.Borrowing;
-import library.model.document.Document;
+import library.model.loan.Loan;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 public class Client {
     private final int id;
-    private String firstName;
-    private String lastName;
-    private String address;
-    private String eMail;
-    private String postalCode;
-    private double totalFees;
-    private final List<Borrowing> borrowingList = new ArrayList<>();
+    private final String firstName;
+    private final String lastName;
+    private final String address;
+    private final String eMail;
+    private final String postalCode;
 
-    public String geteMail() {
-        return eMail;
-    }
+    private final List<Loan> loanList = new ArrayList<>();
 
-    public List<Borrowing> getBorrowingList() {
-        return borrowingList;
+    public List<Loan> getLoanList() {
+        return loanList;
     }
 
     @Override
@@ -35,44 +33,45 @@ public class Client {
                 ", address='" + address + '\'' +
                 ", eMail='" + eMail + '\'' +
                 ", postalCode='" + postalCode + '\'' +
-                ", totalFees=" + totalFees +
-                ", borrowingList=" + borrowingList +
+                ", totalFees=" + getTotalFees() +
+                ", borrowingList=" + loanList +
                 '}';
     }
 
-    public Client(int id, String firstName, String lastName, String address, String eMail, String postalCode, double totalFees) {
+    public Client(int id, String firstName, String lastName, String address, String eMail, String postalCode) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.eMail = eMail;
         this.postalCode = postalCode;
-        this.totalFees = totalFees;
 
     }
 
-    public void addBorrowing(Borrowing borrowing){
-        borrowingList.add(borrowing);
+    public void addLoan(Loan loan){
+        loanList.add(loan);
 
     }
-    public void removeBorrowing(int borrowingId){
-        for(int i = 0 ; i < borrowingList.size(); i++){
-            if(borrowingList.get(i).getId() == borrowingId){
-                borrowingList.remove(i);
+    public void removeLoan(int loanId){
+        for(int i = 0; i < loanList.size(); i++){
+            if(loanList.get(i).getId() == loanId){
+                loanList.remove(i);
                 return;
             }
         }
     }
 
-    public void removeBorrowing(Borrowing borrowing){
-        borrowingList.remove(borrowing);
-    }
-
-    public void checkForFees(){
+    public double getTotalFees(){
+        double totalFees = 0;
         Date today = java.sql.Timestamp.valueOf(LocalDateTime.now());
-        for (Borrowing borrowing : borrowingList) {
-            if (borrowing.getReturnDate().after(today)) totalFees = totalFees + borrowing.getCOST_PER_DAYS_LATE();
+        for (Loan loan : loanList) {
+            if (loan.getReturnDate().after(today)){
+                long nbDaysLate = DAYS.between(LocalDateTime.now(),new java.sql.Date(loan.getReturnDate().getTime()).toLocalDate() );
+
+                totalFees += loan.getCOST_PER_DAYS_LATE() * nbDaysLate;
+            }
         }
+        return totalFees;
     }
 
 
@@ -100,27 +99,6 @@ public class Client {
         return postalCode;
     }
 
-    public double getTotalFees() {
-        return totalFees;
-    }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
 }
