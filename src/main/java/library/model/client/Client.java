@@ -11,14 +11,14 @@ import java.util.List;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class Client {
-    private final int id;
-    private final String firstName;
-    private final String lastName;
-    private final String address;
-    private final String eMail;
-    private final String postalCode;
+    private  int id;
+    private  String firstName;
+    private  String lastName;
+    private  String address;
+    private  String eMail;
+    private  String postalCode;
 
-    private final List<Loan> loanList = new ArrayList<>();
+    private  List<Loan> loanList = new ArrayList<>();
 
     public List<Loan> getLoanList() {
         return loanList;
@@ -38,8 +38,7 @@ public class Client {
                 '}';
     }
 
-    public Client(int id, String firstName, String lastName, String address, String eMail, String postalCode) {
-        this.id = id;
+    public Client( String firstName, String lastName, String address, String eMail, String postalCode) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;

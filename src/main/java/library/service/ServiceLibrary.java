@@ -1,11 +1,11 @@
 package library.service;
 
-import library.model.loan.Loan;
-import library.model.client.Client;
 import library.model.document.Book;
-import library.model.document.Cd;
-import library.model.document.Dvd;
 import library.persistence.JDBCLibrary;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class ServiceLibrary {
@@ -18,68 +18,20 @@ public class ServiceLibrary {
         this.jdbcLibrary = jdbcLibrary;
     }
 
-    public void createTableClient(){
-        jdbcLibrary.createTableClient();
+
+    public long saveBook(String title, String author, String editor,String year, int nbPages, String genre ) throws Exception {
+
+       return jdbcLibrary.createBook(title, author, editor, stringToDate(year), nbPages, genre);
     }
 
-    public void saveClient(Client client){
-        jdbcLibrary.save(client);
-
-        for(Loan loan : client.getLoanList()){
-            jdbcLibrary.save(loan, client.getId());
-        }
-
-    }
-
-    public Client getClient(int clientId){
-       return jdbcLibrary.getClient(clientId);
-    }
-
-    public void createTableBook(){
-        jdbcLibrary.createTableBook();
-    }
-
-    public void saveBook(Book book){
-        jdbcLibrary.save(book);
-    }
-
-    public Book getBook(int bookId){
+    public Book getBook(long bookId){
         return jdbcLibrary.getBook(bookId);
     }
 
-    public void createTableCd(){
-        jdbcLibrary.createTableCd();
-    }
-    public void saveCd(Cd cd){
-        jdbcLibrary.save(cd);
-    }
-    public Cd getCd(int cdId){
-       return jdbcLibrary.getCd(cdId);
+
+    private Date stringToDate(String stringDate) throws ParseException {
+        return new SimpleDateFormat("yyyy").parse(stringDate);
+
     }
 
-    public void createTableDvd(){
-        jdbcLibrary.createTableDvd();
-    }
-    public void saveDvd(Dvd dvd){
-        jdbcLibrary.save(dvd);
-    }
-    public Dvd getDvd(int dvdId){
-        return jdbcLibrary.getDvd(dvdId);
-    }
-
-    public void createTableDocument(){
-        jdbcLibrary.createTableDocument();
-    }
-
-    public void createTableBorrowing(){
-        jdbcLibrary.createTableBorrowing();
-    }
-
-    public void dropAll(){
-        jdbcLibrary.dropAll();
-    }
-
-    public Loan getBorrowing(int borrowingId){
-       return jdbcLibrary.getBorrowing(borrowingId);
-    }
 }

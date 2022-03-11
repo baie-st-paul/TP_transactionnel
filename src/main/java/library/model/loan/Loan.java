@@ -10,9 +10,9 @@ import java.util.Date;
 
 public class Loan {
 
-    private final int id;
-    private final Date loanDate;
-    private final Date returnDate;
+    private  int id;
+    private  Date loanDate;
+    private  Date returnDate;
 
     public Document getDocument() {
         return document;
@@ -20,8 +20,7 @@ public class Loan {
 
     private final Document document;
 
-    public Loan(int id, Document document) {
-        this.id = id;
+    public Loan( Document document) {
         this.document = document;
         this.loanDate = java.sql.Timestamp.valueOf(LocalDateTime.now()) ;
         this.returnDate = findReturnDate();
