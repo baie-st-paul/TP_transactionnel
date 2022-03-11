@@ -1,26 +1,42 @@
 package library.model.loan;
 
 
+import library.model.client.Client;
 import library.model.document.Document;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
-
+@Entity
+@Data
+@NoArgsConstructor
 public class Loan {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "loan_id")
     private  int id;
     private  Date loanDate;
     private  Date returnDate;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    @ToString.Exclude
+    private Client client;
 
     public Document getDocument() {
         return document;
     }
 
-    private final Document document;
+    @OneToOne
+    private Document document;
 
-    public Loan( Document document) {
+    public Loan( Document document, Client client) {
+        this.client = client;
         this.document = document;
         this.loanDate = java.sql.Timestamp.valueOf(LocalDateTime.now()) ;
         this.returnDate = findReturnDate();

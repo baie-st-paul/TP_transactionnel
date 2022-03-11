@@ -94,5 +94,28 @@ public class JDBCLibraryH2 implements JDBCLibrary{
         return dvd;
     }
 
+    @Override
+    public long createClient(String firstName, String lastName, String address, String eMail, String postalCode) {
+        Client client = new Client(firstName,lastName,address,eMail, postalCode);
+        save(client);
+
+
+        return client.getId();
+    }
+
+    @Override
+    public Client getClient(long clientId) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final Client client = em.find(Client.class, clientId);
+
+        em.getTransaction().commit();
+        em.close();
+
+        return client;
+
+    }
+
 
 }

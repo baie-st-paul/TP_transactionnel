@@ -1,7 +1,10 @@
 package library.model.client;
 
 import library.model.loan.Loan;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,14 +13,21 @@ import java.util.List;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
+@Entity
+@Data
+@NoArgsConstructor
 public class Client {
-    private  int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "client_id")
+    private  long id;
     private  String firstName;
     private  String lastName;
     private  String address;
     private  String eMail;
     private  String postalCode;
 
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "client")
     private  List<Loan> loanList = new ArrayList<>();
 
     public List<Loan> getLoanList() {
@@ -74,7 +84,7 @@ public class Client {
     }
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

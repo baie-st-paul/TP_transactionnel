@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Document {
+public abstract class Document {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

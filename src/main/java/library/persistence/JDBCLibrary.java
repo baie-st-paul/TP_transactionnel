@@ -1,5 +1,6 @@
 package library.persistence;
 
+import library.model.client.Client;
 import library.model.document.Book;
 import library.model.document.Cd;
 import library.model.document.Dvd;
@@ -20,4 +21,8 @@ public interface JDBCLibrary {
      Cd getCd(long cdId);
 
      Dvd getDvd(long dvdId);
+
+     long createClient(String firstName, String lastName, String address, String eMail, String postalCode);
+
+     Client getClient(long clientId);
 }

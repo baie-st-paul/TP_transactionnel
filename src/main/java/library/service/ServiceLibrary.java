@@ -1,5 +1,6 @@
 package library.service;
 
+import library.model.client.Client;
 import library.model.document.Book;
 import library.model.document.Cd;
 import library.model.document.Dvd;
@@ -55,5 +56,15 @@ public class ServiceLibrary {
     public Dvd getDvd(long dvdId) {
         return jdbcLibrary.getDvd(dvdId);
 
+    }
+
+    public long createClient(String firstName, String lastName, String address, String eMail, String postalCode) {
+        return jdbcLibrary.createClient(firstName,lastName,address,eMail,postalCode);
+
+
+    }
+
+    public Client getClient(long clientId) {
+        return jdbcLibrary.getClient(clientId);
     }
 }
