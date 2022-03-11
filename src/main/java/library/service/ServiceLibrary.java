@@ -1,6 +1,8 @@
 package library.service;
 
 import library.model.document.Book;
+import library.model.document.Cd;
+import library.model.document.Dvd;
 import library.persistence.JDBCLibrary;
 
 import java.text.ParseException;
@@ -34,4 +36,24 @@ public class ServiceLibrary {
 
     }
 
+    public long saveCd(String title, String author, String editor, String year, int nbScenes, String genre) throws Exception {
+        return jdbcLibrary.createCd(title, author, editor, stringToDate(year), nbScenes, genre);
+
+    }
+
+    public long saveDvd(String title, String author, String editor, String year, int nbScenes, String genre) throws Exception {
+        return jdbcLibrary.createDvd(title, author, editor, stringToDate(year), nbScenes, genre);
+
+    }
+
+
+    public Cd getCd(long cdId) {
+        return jdbcLibrary.getCd(cdId);
+
+    }
+
+    public Dvd getDvd(long dvdId) {
+        return jdbcLibrary.getDvd(dvdId);
+
+    }
 }

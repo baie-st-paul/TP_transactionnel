@@ -50,4 +50,49 @@ public class JDBCLibraryH2 implements JDBCLibrary{
 
         return book;
     }
+
+    @Override
+    public long createCd(String title, String author, String editor, Date publicationYear, int nbScenes, String genre) {
+        Cd cd = new Cd(title,author,editor,publicationYear,nbScenes,genre);
+        save(cd);
+
+        return cd.getId();
+    }
+
+    @Override
+    public long createDvd(String title, String author, String editor, Date publicationYear, int nbScenes, String genre) {
+        Dvd dvd = new Dvd(title,author,editor,publicationYear,nbScenes,genre);
+        save(dvd);
+
+        return dvd.getId();
+    }
+
+    @Override
+    public Cd getCd(long cdId) {
+
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final Cd cd = em.find(Cd.class, cdId);
+
+        em.getTransaction().commit();
+        em.close();
+
+        return cd;
+    }
+
+    @Override
+    public Dvd getDvd(long dvdId) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final Dvd dvd = em.find(Dvd.class, dvdId);
+
+        em.getTransaction().commit();
+        em.close();
+
+        return dvd;
+    }
+
+
 }
