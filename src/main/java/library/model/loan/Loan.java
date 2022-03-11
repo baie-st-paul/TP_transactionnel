@@ -9,7 +9,6 @@ import lombok.ToString;
 
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 @Entity
@@ -19,9 +18,9 @@ public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "loan_id")
-    private  int id;
+    private  long id;
     private  Date loanDate;
-    private  Date returnDate;
+
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -35,15 +34,13 @@ public class Loan {
     @OneToOne
     private Document document;
 
-    public Loan( Document document, Client client) {
+    public Loan( Document document, Client client, Date loanDate) {
         this.client = client;
         this.document = document;
-        this.loanDate = java.sql.Timestamp.valueOf(LocalDateTime.now()) ;
-        this.returnDate = findReturnDate();
-
+        this.loanDate = loanDate ;
     }
 
-    private Date findReturnDate(){
+    public Date fetchReturnDate(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(loanDate);
         calendar.add(Calendar.DATE, document.getLOAN_DAYS());
@@ -54,7 +51,7 @@ public class Loan {
         return 0.25;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -64,15 +61,12 @@ public class Loan {
 
 
 
-    public Date getReturnDate() {
-        return returnDate;
-    }
     @Override
     public String toString() {
         return "Borrowing{" +
                 "id=" + id +
                 ", loanDate=" + loanDate +
-                ", returnDate=" + returnDate +
+                ", returnDate=" + fetchReturnDate() +
                 ", document=" + document +
                 '}';
     }

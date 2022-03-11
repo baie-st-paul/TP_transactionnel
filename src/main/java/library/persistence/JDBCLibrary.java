@@ -3,6 +3,7 @@ package library.persistence;
 import library.model.client.Client;
 import library.model.document.Book;
 import library.model.document.Cd;
+import library.model.document.Document;
 import library.model.document.Dvd;
 
 import java.util.Date;
@@ -25,4 +26,6 @@ public interface JDBCLibrary {
      long createClient(String firstName, String lastName, String address, String eMail, String postalCode);
 
      Client getClient(long clientId);
+
+     long createLoan(Document document, Client client);
 }

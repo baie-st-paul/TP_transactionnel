@@ -53,7 +53,7 @@ public abstract class Document {
     }
 
     public void setLoaned(boolean loaned) {
-        isLoaned = loaned;
+        this.isLoaned = loaned;
     }
 
     public Document( String title, String author, String editor, Date publicationYear, String genre) {
@@ -67,15 +67,12 @@ public abstract class Document {
 
 
     public int getLOAN_DAYS() {
-        switch (this.getClass().getSimpleName()){
-            case "Book":
-                return 21;
-            case "Cd":
-                return 14;
-            case "Dvd":
-                return 7;
-        }
-        return 0;
+        return switch (this.getClass().getSimpleName()) {
+            case "Book" -> 21;
+            case "Cd" -> 14;
+            case "Dvd" -> 7;
+            default -> 0;
+        };
     }
 
 

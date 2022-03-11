@@ -44,7 +44,7 @@ public class Client {
                 ", eMail='" + eMail + '\'' +
                 ", postalCode='" + postalCode + '\'' +
                 ", totalFees=" + getTotalFees() +
-                ", borrowingList=" + loanList +
+                "$, borrowingList=" + loanList +
                 '}';
     }
 
@@ -74,8 +74,8 @@ public class Client {
         double totalFees = 0;
         Date today = java.sql.Timestamp.valueOf(LocalDateTime.now());
         for (Loan loan : loanList) {
-            if (loan.getReturnDate().after(today)){
-                long nbDaysLate = DAYS.between(LocalDateTime.now(),new java.sql.Date(loan.getReturnDate().getTime()).toLocalDate() );
+            if (loan.fetchReturnDate().before(today)){
+                long nbDaysLate = DAYS.between(LocalDate.now(),new java.sql.Date(loan.fetchReturnDate().getTime()).toLocalDate() );
 
                 totalFees += loan.getCOST_PER_DAYS_LATE() * nbDaysLate;
             }

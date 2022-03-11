@@ -67,4 +67,16 @@ public class ServiceLibrary {
     public Client getClient(long clientId) {
         return jdbcLibrary.getClient(clientId);
     }
+
+    public long loanBookToCLient(long bookId, long clientId) {
+        return jdbcLibrary.createLoan(getBook(bookId), getClient(clientId));
+
+
+    }
+    public long loanCdToClient(long cdId, long clientId){
+        return jdbcLibrary.createLoan(getCd(cdId),getClient(clientId));
+    }
+    public long loanDvdToClient(long dvdId, long clientId){
+        return jdbcLibrary.createLoan(getDvd(dvdId),getClient(clientId));
+    }
 }

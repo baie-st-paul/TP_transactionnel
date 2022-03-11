@@ -11,8 +11,7 @@ import library.model.document.Dvd;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.sql.*;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class JDBCLibraryH2 implements JDBCLibrary{
@@ -29,6 +28,16 @@ public class JDBCLibraryH2 implements JDBCLibrary{
 
     }
 
+    private  <T> void merge(T t) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        em.merge(t);
+
+        em.getTransaction().commit();
+        em.close();
+
+    }
     @Override
     public long createBook(String title, String author, String editor, Date publicationYear, int nbPages, String genre) {
         final Book book = new Book(title, author, editor, publicationYear, nbPages, genre);
@@ -99,7 +108,6 @@ public class JDBCLibraryH2 implements JDBCLibrary{
         Client client = new Client(firstName,lastName,address,eMail, postalCode);
         save(client);
 
-
         return client.getId();
     }
 
@@ -115,6 +123,16 @@ public class JDBCLibraryH2 implements JDBCLibrary{
 
         return client;
 
+    }
+
+    @Override
+    public long createLoan(Document document, Client client) {
+        document.setLoaned(true);
+        Loan loan = new Loan(document, client, java.sql.Timestamp.valueOf(LocalDateTime.now()));
+
+        save(loan);
+        merge(document);
+        return loan.getId();
     }
 
 
