@@ -136,4 +136,34 @@ public class JDBCLibraryH2 implements JDBCLibrary{
     }
 
 
+
+    @Override
+    public void removeLoan(Loan loan) {
+
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        em.remove(em.contains(loan) ? loan: em.merge(loan));
+
+        em.getTransaction().commit();
+        em.close();
+        loan.getDocument().setLoaned(false);
+        merge(loan.getDocument());
+    }
+
+    @Override
+    public Loan getLoan(long loanId) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final Loan loan = em.find(Loan.class,loanId);
+
+        em.getTransaction().commit();
+        em.close();
+
+        return loan;
+
+    }
+
+
 }

@@ -5,6 +5,7 @@ import library.model.document.Book;
 import library.model.document.Cd;
 import library.model.document.Document;
 import library.model.document.Dvd;
+import library.model.loan.Loan;
 
 import java.util.Date;
 
@@ -28,4 +29,9 @@ public interface JDBCLibrary {
      Client getClient(long clientId);
 
      long createLoan(Document document, Client client);
+
+     void removeLoan(Loan loan);
+
+
+     Loan getLoan(long loanId);
 }

@@ -4,7 +4,9 @@ import library.model.client.Client;
 import library.model.document.Book;
 import library.model.document.Cd;
 import library.model.document.Dvd;
+import library.model.loan.Loan;
 import library.persistence.JDBCLibrary;
+import library.persistence.JDBCLibraryH2;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -109,4 +111,17 @@ public class ServiceLibrary {
             return 0;
         }
     }
+
+
+    public void returnDocumentFromClient(long loanId) {
+        jdbcLibrary.removeLoan(getLoan(loanId));
+
+
+    }
+
+    private Loan getLoan(long loanId) {
+        return jdbcLibrary.getLoan(loanId);
+    }
+
+
 }

@@ -22,8 +22,11 @@ public class Main {
         long loanId3 = s.loanDvdToClient(dvdId,clientId);
         System.out.println(s.getClient(clientId));
 
-
-
+        s.returnDocumentFromClient(loanId1);
+        s.returnDocumentFromClient(loanId2);
+        s.returnDocumentFromClient(loanId3);
+        System.out.println(s.getClient(clientId));
+        System.out.println(s.getBook(bookId1));
         System.out.println();
         System.out.println("done!");
 
