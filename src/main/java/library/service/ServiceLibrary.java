@@ -68,15 +68,45 @@ public class ServiceLibrary {
         return jdbcLibrary.getClient(clientId);
     }
 
-    public long loanBookToCLient(long bookId, long clientId) {
-        return jdbcLibrary.createLoan(getBook(bookId), getClient(clientId));
+    public long loanBookToCLient(long bookId, long clientId){
+        try {
+            Client client = getClient(clientId);
+            Book book = getBook(bookId);
+            if(client.getTotalFees() > 0)throw new Exception("Client has fees");
+            if(book.isLoaned())throw new Exception("Book is already loaned");
+            return jdbcLibrary.createLoan(book, client);
+        }
+        catch (Exception e){
+            System.out.println(e.getLocalizedMessage());
+            return 0;
+        }
 
 
     }
     public long loanCdToClient(long cdId, long clientId){
-        return jdbcLibrary.createLoan(getCd(cdId),getClient(clientId));
+        try {
+            Client client = getClient(clientId);
+            Cd cd = getCd(cdId);
+            if(client.getTotalFees() > 0)throw new Exception("Client has fees");
+            if(cd.isLoaned())throw new Exception("Cd is already loaned");
+            return jdbcLibrary.createLoan(cd,client);
+        }
+        catch (Exception e){
+            System.out.println(e.getLocalizedMessage());
+            return 0;
+        }
     }
     public long loanDvdToClient(long dvdId, long clientId){
-        return jdbcLibrary.createLoan(getDvd(dvdId),getClient(clientId));
+        try{
+            Client client = getClient(clientId);
+            Dvd dvd = getDvd(dvdId);
+            if(client.getTotalFees() > 0)throw new Exception("Client has fees");
+            if(dvd.isLoaned())throw new Exception("dvd is already loaned");
+            return jdbcLibrary.createLoan(getDvd(dvdId),client);
+        }
+        catch (Exception e){
+            System.out.println(e.getLocalizedMessage());
+            return 0;
+        }
     }
 }
