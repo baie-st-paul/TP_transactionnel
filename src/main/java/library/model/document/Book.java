@@ -36,7 +36,7 @@ public class Book extends Document{
                 ", publicationYear=" + getPublicationYear() +
                 ", genre='" + getGenre() + '\'' +
                 ", isLoaned=" + isLoaned() +
-                ", nbPages" + nbPages +
+                ", nbPages=" + nbPages +
                 '}';
     }
 }

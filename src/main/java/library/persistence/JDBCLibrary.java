@@ -8,6 +8,7 @@ import library.model.document.Dvd;
 import library.model.loan.Loan;
 
 import java.util.Date;
+import java.util.List;
 
 public interface JDBCLibrary {
 
@@ -34,4 +35,28 @@ public interface JDBCLibrary {
 
 
      Loan getLoan(long loanId);
+
+     List<Book> getBookByGenre(String genre);
+
+     List<Cd> getCdByGenre(String genre);
+
+     List<Dvd> getDvdByGenre(String genre);
+
+     List<Book> getBookByPublishingYear(Date year);
+
+     List<Cd> getCdByPublishingYear(Date year);
+
+     List<Dvd> getDvdByPublishingYear(Date year);
+
+     List<Book> getBookByAuthor(String author);
+
+     List<Cd> getCdByAuthor(String author);
+
+     List<Dvd> getDvdByAuthor(String author);
+
+     List<Book> getBookByTitle(String title);
+
+     List<Cd> getCdByTitle(String title);
+
+     List<Dvd> getDvdByTitle(String title);
 }

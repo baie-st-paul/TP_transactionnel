@@ -11,8 +11,10 @@ import library.model.document.Dvd;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 public class JDBCLibraryH2 implements JDBCLibrary{
     private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("library.exe");
@@ -163,6 +165,258 @@ public class JDBCLibraryH2 implements JDBCLibrary{
 
         return loan;
 
+    }
+
+    @Override
+    public List<Book> getBookByGenre(String genre) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final TypedQuery<Book> query = em.createQuery(
+                "select" +
+                        " book "+
+                    "from" +
+                        " Book book " +
+                    "where" +
+                      " book.genre = :genre"
+                , Book.class
+        );
+        query.setParameter("genre", genre);
+        List<Book> bookList= query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return bookList;
+    }
+
+    @Override
+    public List<Cd> getCdByGenre(String genre) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final TypedQuery<Cd> query = em.createQuery(
+                "select" +
+                        " cd "+
+                        "from" +
+                        " Cd cd " +
+                        "where" +
+                        " cd.genre = :genre"
+                , Cd.class
+        );
+        query.setParameter("genre", genre);
+        List<Cd> cdList= query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return cdList;
+    }
+
+    @Override
+    public List<Dvd> getDvdByGenre(String genre) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final TypedQuery<Dvd> query = em.createQuery(
+                "select" +
+                        " dvd "+
+                        "from" +
+                        " Dvd dvd " +
+                        "where" +
+                        " dvd.genre = :genre"
+                , Dvd.class
+        );
+        query.setParameter("genre", genre);
+        List<Dvd> dvdList= query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return dvdList;
+    }
+
+    @Override
+    public List<Book> getBookByPublishingYear(Date year) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final TypedQuery<Book> query = em.createQuery(
+                "select" +
+                        " book "+
+                        "from" +
+                        " Book book " +
+                        "where" +
+                        " book.publicationYear = :year"
+                , Book.class
+        );
+        query.setParameter("year", year);
+        List<Book> bookList= query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return bookList;
+    }
+
+    @Override
+    public List<Cd> getCdByPublishingYear(Date year) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final TypedQuery<Cd> query = em.createQuery(
+                "select" +
+                        " cd "+
+                        "from" +
+                        " Cd cd " +
+                        "where" +
+                        " cd.publicationYear = :year"
+                , Cd.class
+        );
+        query.setParameter("year", year);
+        List<Cd> cdList= query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return cdList;
+    }
+
+    @Override
+    public List<Dvd> getDvdByPublishingYear(Date year) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final TypedQuery<Dvd> query = em.createQuery(
+                "select" +
+                        " dvd "+
+                        "from" +
+                        " Dvd dvd " +
+                        "where" +
+                        " dvd.publicationYear = :year"
+                , Dvd.class
+        );
+        query.setParameter("year", year);
+        List<Dvd> dvdList= query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return dvdList;
+    }
+
+    @Override
+    public List<Book> getBookByAuthor(String author) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final TypedQuery<Book> query = em.createQuery(
+                "select" +
+                        " book "+
+                        "from" +
+                        " Book book " +
+                        "where" +
+                        " book.author = :author"
+                , Book.class
+        );
+        query.setParameter("author", author);
+        List<Book> bookList= query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return bookList;
+    }
+
+    @Override
+    public List<Cd> getCdByAuthor(String author) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final TypedQuery<Cd> query = em.createQuery(
+                "select" +
+                        " cd "+
+                        "from" +
+                        " Cd cd " +
+                        "where" +
+                        " cd.author = :author"
+                , Cd.class
+        );
+        query.setParameter("author", author);
+        List<Cd> cdBook= query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return cdBook;
+    }
+
+    @Override
+    public List<Dvd> getDvdByAuthor(String author) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final TypedQuery<Dvd> query = em.createQuery(
+                "select" +
+                        " dvd "+
+                        "from" +
+                        " Dvd dvd " +
+                        "where" +
+                        " dvd.author = :author"
+                , Dvd.class
+        );
+        query.setParameter("author", author);
+        List<Dvd> dvdList= query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return dvdList;
+    }
+
+    @Override
+    public List<Book> getBookByTitle(String title) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final TypedQuery<Book> query = em.createQuery(
+                "select" +
+                        " book "+
+                        "from" +
+                        " Book book " +
+                        "where" +
+                        " book.title LIKE :title"
+                , Book.class
+        );
+        query.setParameter("title", "%"+title+"%");
+        List<Book> bookList= query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return bookList;
+    }
+
+    @Override
+    public List<Cd> getCdByTitle(String title) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final TypedQuery<Cd> query = em.createQuery(
+                "select" +
+                        " cd "+
+                        "from" +
+                        " Cd cd " +
+                        "where" +
+                        " cd.title LIKE :title"
+                , Cd.class
+        );
+        query.setParameter("title", "%"+title+"%");
+        List<Cd> cdList= query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return cdList;
+    }
+
+    @Override
+    public List<Dvd> getDvdByTitle(String title) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final TypedQuery<Dvd> query = em.createQuery(
+                "select" +
+                        " dvd "+
+                        "from" +
+                        " Dvd dvd " +
+                        "where" +
+                        " dvd.title LIKE :title"
+                , Dvd.class
+        );
+        query.setParameter("title", "%"+title+"%");
+        List<Dvd> dvdList= query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return dvdList;
     }
 
 

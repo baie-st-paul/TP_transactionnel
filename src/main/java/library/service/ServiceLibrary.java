@@ -6,11 +6,12 @@ import library.model.document.Cd;
 import library.model.document.Dvd;
 import library.model.loan.Loan;
 import library.persistence.JDBCLibrary;
-import library.persistence.JDBCLibraryH2;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 
 public class ServiceLibrary {
@@ -124,4 +125,45 @@ public class ServiceLibrary {
     }
 
 
+    public List<Book> getBookByGenre(String genre) {
+        return jdbcLibrary.getBookByGenre(genre);
+    }
+    public List<Cd> getCdByGenre(String genre){
+        return jdbcLibrary.getCdByGenre(genre);
+    }
+    public List<Dvd> getDvdByGenre(String genre){
+        return jdbcLibrary.getDvdByGenre(genre);
+    }
+
+    public List<Book> getBookByPublishingYear(String publishingYear) throws ParseException {
+        return jdbcLibrary.getBookByPublishingYear(stringToDate(publishingYear));
+    }
+
+    public List<Cd> getCdByPublishingYear(String publishingYear) throws ParseException {
+        return jdbcLibrary.getCdByPublishingYear(stringToDate(publishingYear));
+    }
+
+    public List<Dvd> getDvdByPublishingYear(String publishingYear) throws ParseException {
+        return jdbcLibrary.getDvdByPublishingYear(stringToDate(publishingYear));
+    }
+
+    public List<Book> getBookByAuthor(String author) {
+        return jdbcLibrary.getBookByAuthor(author);
+    }
+    public List<Cd> getCdByAuthor(String author) {
+        return jdbcLibrary.getCdByAuthor(author);
+    }
+    public List<Dvd> getDvdByAuthor(String author) {
+        return jdbcLibrary.getDvdByAuthor(author);
+    }
+
+    public List<Book> getBookByTitle(String title){
+        return jdbcLibrary.getBookByTitle(title.toLowerCase(Locale.ROOT));
+    }
+    public List<Cd> getCdByTitle(String title){
+        return jdbcLibrary.getCdByTitle(title.toLowerCase(Locale.ROOT));
+    }
+    public List<Dvd> getDvdByTitle(String title){
+        return jdbcLibrary.getDvdByTitle(title.toLowerCase(Locale.ROOT));
+    }
 }

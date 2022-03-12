@@ -37,7 +37,7 @@ public class Dvd extends Document{
                 ", publicationYear=" + getPublicationYear() +
                 ", genre='" + getGenre() + '\'' +
                 ", isLoaned=" + isLoaned() +
-                ", nbScenes" + nbScenes +
+                ", nbScenes=" + nbScenes +
                 '}';
     }
 }
